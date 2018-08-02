@@ -4,7 +4,10 @@ package main
  *	借鉴: https://www.imooc.com/article/20582#0-tsina-1-29356-397232819ff9a47a7b7e80a40613cfe1
  *
  */
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Node struct{
 	Data interface{}
@@ -31,12 +34,15 @@ func (s *SingleChain) Add(data *Node){
 	s.Size++
 }
 
-func (s *SingleChain) Show(){
+func (s *SingleChain) Show() string{
 	cursor := s.Head
+	result := make([]string, 0)
 	for cursor !=nil{
 		fmt.Println(cursor.Data)
+		result = append(result, fmt.Sprintf("%v", cursor.Data))
 		cursor = cursor.Next
 	}
+	return strings.Join(result, "->")
 }
 
 func main(){
@@ -45,5 +51,5 @@ func main(){
 	s.Add(&Node{2, nil})
 	s.Add(&Node{3, nil})
 
-	s.Show()
+	fmt.Println(s.Show())
 }
