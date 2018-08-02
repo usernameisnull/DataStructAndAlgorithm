@@ -11,11 +11,11 @@ import (
 
 type Node struct{
 	Data interface{}
-	Next *Node
+	Next *Node   // 这里只能是指针。不是指针的话报错，Golang不支持这种嵌套
 }
 
 type SingleChain struct{
-	Head *Node
+	Head *Node   // 这里如果不是引用的话，不好处理，因为Golang不好判断结构体是否为空
 	Size int
 }
 
@@ -37,12 +37,27 @@ func (s *SingleChain) Add(data *Node){
 func (s *SingleChain) Show() string{
 	cursor := s.Head
 	result := make([]string, 0)
-	for cursor !=nil{
-		fmt.Println(cursor.Data)
+	for cursor != nil{
 		result = append(result, fmt.Sprintf("%v", cursor.Data))
 		cursor = cursor.Next
 	}
 	return strings.Join(result, "->")
+}
+
+func (s *SingleChain) Reverse(){
+	if s.Size<=1{
+		return
+	}
+
+	cursor := s.Head
+	var prev *Node // 这里不要用 var prev = &Node{nil, nil}这种形式，因为这样prev!=nil是成立的
+	for cursor != nil{
+		current := cursor
+		cursor = cursor.Next
+		current.Next = prev
+		prev = current
+	}
+	s.Head = prev
 }
 
 func main(){
@@ -50,6 +65,8 @@ func main(){
 	s.Add(&Node{1, nil})
 	s.Add(&Node{2, nil})
 	s.Add(&Node{3, nil})
-
+	fmt.Println(s.Show())
+	fmt.Println("After reverse================")
+	s.Reverse()
 	fmt.Println(s.Show())
 }
