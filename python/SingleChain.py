@@ -83,6 +83,22 @@ class SingleChain(object):
             pre.next = new_node
             new_node.next = cursor
 
+    def __iter__(self):
+        self.cursor = self.head
+        return self
+
+    def next(self):
+        """
+        实现迭代
+        :return:
+        """
+        temp = self.cursor
+        if self.cursor is None:
+            raise StopIteration()
+        else:
+            self.cursor = self.cursor.next
+            return temp
+
     def __reversed__(self):
         """
         逆序
@@ -116,3 +132,6 @@ if __name__ == "__main__":
     print s.show()
     reversed(s)
     print s.show()
+    print "="*15
+    for item in s:
+        print item.data
