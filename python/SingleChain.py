@@ -41,7 +41,7 @@ class SingleChain(object):
             cursor.next = new_node
         self.size += 1
 
-    def show(self):
+    def __str__(self):
         cursor = self.head
         result = []
         while cursor is not None:
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     s.append(2)
     s.append(3)
     print s.size
-    print s.show()
+    print s
     print "取元素", "=" * 15
     print s[0].data
     print s[1].data
@@ -152,9 +152,9 @@ if __name__ == "__main__":
     s[1] = 11
     s[4] = 4
     print "反向", "=" * 15
-    print s.show()
+    print s
     reversed(s)
-    print s.show()
+    print s
     print "迭代", "=" * 15
     for item in s:
         print item.data
