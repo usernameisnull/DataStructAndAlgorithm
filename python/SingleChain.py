@@ -4,7 +4,7 @@
         解释: https://zh.wikipedia.org/wiki/%E5%8D%95%E5%90%91%E9%93%BE%E8%A1%A8
         借鉴: https://blog.csdn.net/Marksinoberg/article/details/69310033
 """
-
+from copy import deepcopy
 
 class Node(object):
     """
@@ -121,8 +121,10 @@ class SingleChain(object):
         :param other:
         :return:
         """
-        reversed(self)
-        reversed(other)
+        _self = deepcopy(self)
+        _other = deepcopy(other)
+        reversed(_self)
+        reversed(_other)
         result = []
         for item in [self, other]:
             cursor = item.head
