@@ -34,14 +34,24 @@ func (s *SingleChain) Add(data *Node){
 	s.Size++
 }
 
-func (s *SingleChain) Show() string{
-	cursor := s.Head
-	result := make([]string, 0)
-	for cursor != nil{
-		result = append(result, fmt.Sprintf("%v", cursor.Data))
-		cursor = cursor.Next
+func (s *SingleChain) IsEmpty() bool{
+	return s.Head == nil
+}
+
+func (s *SingleChain) String() string{
+
+	if s.IsEmpty(){
+		return "no data"
+	}else{
+		result := make([]string, 0)
+		cursor := s.Head
+		for cursor != nil{
+			result = append(result, fmt.Sprintf("%v",cursor.Data))
+			cursor = cursor.Next
+		}
+		return strings.Join(result, "->")
 	}
-	return strings.Join(result, "->")
+
 }
 
 func (s *SingleChain) Reverse(){
@@ -65,8 +75,8 @@ func main(){
 	s.Add(&Node{1, nil})
 	s.Add(&Node{2, nil})
 	s.Add(&Node{3, nil})
-	fmt.Println(s.Show())
+	fmt.Println(s)
 	fmt.Println("After reverse================")
 	s.Reverse()
-	fmt.Println(s.Show())
+	fmt.Println(s)
 }
