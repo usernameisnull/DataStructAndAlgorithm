@@ -7,10 +7,12 @@ package main
 import (
 	"fmt"
 	"strings"
+	"math"
 )
 
+type Element int
 type Node struct{
-	Data interface{}
+	Data Element
 	Next *Node   // 这里只能是指针。不是指针的话报错，Golang不支持这种嵌套
 }
 
@@ -70,13 +72,36 @@ func (s *SingleChain) Reverse(){
 	s.Head = prev
 }
 
+func (s *SingleChain) Plus(other *SingleChain) float64 {
+	s.Reverse()
+	other.Reverse()
+	items := []*SingleChain{s, other}
+	var result float64 = 0
+	for _, item:=range items{
+		count := 0
+		var itemSum float64 = 0
+		cursor := item.Head
+		for cursor != nil{
+			itemSum += float64(cursor.Data)*math.Pow(float64(10), float64(count))
+			cursor = cursor.Next
+			count++
+		}
+		result += itemSum
+	}
+	return result
+}
+
 func main(){
 	s := &SingleChain{nil,0}
 	s.Add(&Node{1, nil})
 	s.Add(&Node{2, nil})
 	s.Add(&Node{3, nil})
 	fmt.Println(s)
-	fmt.Println("After reverse================")
-	s.Reverse()
-	fmt.Println(s)
+	//fmt.Println("After reverse================")
+	//s.Reverse()
+	//fmt.Println(s)
+	s1 := &SingleChain{nil,0}
+	s1.Add(&Node{4, nil})
+	s1.Add(&Node{5, nil})
+	fmt.Println(s.Plus(s1))
 }
