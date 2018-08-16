@@ -72,17 +72,14 @@ func (s *SingleChain) Reverse(){
 	s.Head = prev
 }
 
-func (s *SingleChain) Plus(other *SingleChain) float64 {
-	s.Reverse()
-	other.Reverse()
-	items := []*SingleChain{s, other}
+func (s *SingleChain) Plus(other *SingleChain) float64{
 	var result float64 = 0
-	for _, item:=range items{
-		count := 0
-		var itemSum float64 = 0
+	for _,item := range []*SingleChain{s, other}	{
+		count := 1
+		var itemSum float64=0
 		cursor := item.Head
-		for cursor != nil{
-			itemSum += float64(cursor.Data)*math.Pow(float64(10), float64(count))
+		for cursor!=nil{
+			itemSum += float64(cursor.Data)*math.Pow(float64(10), float64(item.Size-count))
 			cursor = cursor.Next
 			count++
 		}
@@ -104,4 +101,7 @@ func main(){
 	s1.Add(&Node{4, nil})
 	s1.Add(&Node{5, nil})
 	fmt.Println(s.Plus(s1))
+
+	fmt.Println(s)
+	fmt.Println(s1)
 }
