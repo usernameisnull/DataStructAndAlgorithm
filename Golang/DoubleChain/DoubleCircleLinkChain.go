@@ -39,6 +39,21 @@ func (d *DoubleChain) Add(e Element){
 	}
 }
 
+func (d *DoubleChain) Append(e Element){
+	node := &Node{data: e}
+	if d.IsEmpty() {
+		d.head = node
+		d.head.next = node
+		d.head.prev = node
+	}else{
+		node.next = d.head
+		node.prev = d.head.prev.next
+		d.head.prev.next = node
+		d.head.prev = node
+		//d.head = node
+	}
+}
+
 func (d DoubleChain) String()string{
 	if d.IsEmpty(){
 		return "no data"
@@ -62,4 +77,9 @@ func main(){
 	d.Add(3)
 	fmt.Println(d)
 	fmt.Println(d.head.data, d.head.next.data, d.head.next.next.data)
+	d1 := DoubleChain{}
+	d1.Append(4)
+	d1.Append(5)
+	d1.Append(6)
+	fmt.Println(d1)
 }
