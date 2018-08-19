@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 # encoding: utf-8
-#  这特么是个 Binary Search tree  https://medium.freecodecamp.org/all-you-need-to-know-about-tree-data-structures-bceacb85490c
+#   这特么是个 Binary Search tree  https://medium.freecodecamp.org/all-you-need-to-know-about-tree-data-structures-bceacb85490c
 # 　还可以参考　https://github.com/TheAlgorithms/Python/blob/master/data_structures/Binary%20Tree/binary_search_tree.py
 #   二叉查找树（BST：Binary Search Tree）是一种特殊的二叉树，它改善了二叉树节点查找的效率。二叉查找树有以下性质：
 #   对于任意一个节点 n，
@@ -9,36 +9,37 @@
 class Node:
     def __init__(self, data):
         self.data = data
-        self.right_child = None
-        self.left_child = None
+        self.right = None
+        self.left = None
 
 
-class Tree:
+class BinarySearchTree(object):
     def __init__(self):
-        self.root_node = None
+        self.root = None
 
     def insert(self, data):
         node = Node(data)
-        if self.root_node is None:
-            self.root_node = node
+        if self.root is None:
+            self.root = node
         else:
-            current = self.root_node
-            parent = None
+            current = self.root
             while True:
                 parent = current
                 if node.data < parent.data:
-                    current = current.left_child
-                    if current is None:
-                        parent.left_child = node
+                    if parent.left is None:
+                        parent.left = node
                         return
+                    else:
+                        current = parent.left
                 else:
-                    current = current.right_child
-                    if current is None:
-                        parent.right_child = node
+                    if parent.right is None:
+                        parent.right = node
                         return
+                    else:
+                        current = parent.right
 
     def search(self, data):
-        current = self.root_node
+        current = self.root
         while True:
             if current is None:
                 return None
@@ -49,34 +50,55 @@ class Tree:
             else:
                 current = current.right_child
 
+    def width_first(self):
+        """
+        宽度优先遍历
+        :return:
+        """
+        to_visit = [self]
+        while to_visit:
+            current = to_visit.pop(0)
+            if hasattr(current, "root"):
+                current = current.root
+            print current.data
+            if current.left:
+                to_visit.append(current.left)
+            if current.right:
+                to_visit.append(current.right)
 
-n1 = Node("root node")
-n2 = Node("left child node")
-n3 = Node("right child node")
-n4 = Node("left grandchild node")
 
-n1.left_child = n2
-n1.right_child = n3
-n2.left_child = n4
-
-current = n1
-while current:
-    print(current.data)
-    current = current.left_child
-
-tree = Tree()
-tree.insert(5)
-tree.insert(3)
-tree.insert(7)
-tree.insert(9)
-tree.insert(1)
-tree.insert(4)
-print tree.root_node.data  # 5
-print tree.root_node.left_child.data  # 2
-print tree.root_node.left_child.left_child.data  # 1
-print tree.root_node.left_child.right_child.data  # 4
-print tree.root_node.right_child.data
-print tree.root_node.right_child.right_child.data
-# for i in range(1, 10):
-#     found = tree.search(i)
-#     print("{}: {}".format(i, found))
+if __name__ == "__main__":
+    '''
+       Example
+                     8
+                    / \
+                   3   10
+                  / \    \
+                 1   6    14
+                    / \   /
+                   4   7 13 
+    '''
+    t = BinarySearchTree()
+    t.insert(8)
+    t.insert(3)
+    t.insert(6)
+    t.insert(1)
+    t.insert(10)
+    t.insert(14)
+    t.insert(13)
+    t.insert(4)
+    t.insert(7)
+    # 8 3 1 6 4 7 10 14 13
+    # 先打印左边的===========================
+    print t.root.data
+    print t.root.left.data
+    print t.root.left.left.data
+    print t.root.left.right.data
+    print t.root.left.right.left.data
+    print t.root.left.right.right.data
+    # 再打右边的==============================
+    print t.root.right.data
+    print t.root.right.right.data
+    print t.root.right.right.left.data
+    # 宽度优先遍历============================
+    t.width_first()  # 8 3 10 1 6 14 4 7 13
