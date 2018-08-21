@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"errors"
+)
 
 type Element int
 type Node struct {
@@ -60,6 +63,29 @@ func (b *BinarySearchTree) widthFirst(){
 	}
 }
 
+func (b *BinarySearchTree) getMax()(Element, error){
+	if b.root == nil{
+		return 0,errors.New("树为空,无法找到最大值")
+	}else{
+		current := b.root
+		for current.right != nil{
+			current = current.right
+		}
+		return current.data, nil
+	}
+}
+
+func (b *BinarySearchTree) getMin()(Element, error){
+	if b.root == nil{
+		return 0,errors.New("树为空,无法找到最大值")
+	}else{
+		current := b.root
+		for current.left != nil{
+			current = current.left
+		}
+		return current.data, nil
+	}
+}
 func main(){
 /*	Example
 	 8
@@ -95,4 +121,17 @@ func main(){
 	// 宽度优先遍历============================
 	fmt.Println("宽度优先遍历====================")
 	t.widthFirst()  // 8 3 10 1 6 14 4 7 13
+	max,err:=t.getMax()
+	if err!=nil{
+		fmt.Println(err)
+	}else{
+		fmt.Println("树的最大值是: ", max)
+	}
+
+	min,err:=t.getMin()
+	if err!=nil{
+		fmt.Println(err)
+	}else{
+		fmt.Println("树的最小值是: ", min)
+	}
 }
