@@ -26,9 +26,8 @@ class Heap(object):
         :param i:
         :return:
         """
-        if 2 * i + 1 < self.currsize:
-            return 2 * i + 1
-        return None
+        result = 2 * i + 1
+        return result if result < self.currsize else None
 
     def right_child(self, i):
         """
@@ -36,9 +35,8 @@ class Heap(object):
         :param i:
         :return:
         """
-        if 2 * i + 2 < self.currsize:
-            return 2 * i + 2
-        return None
+        result = 2*(i+1)
+        return result if result < self.currsize else None
 
     def max_heapify(self, node):
         """
@@ -46,26 +44,17 @@ class Heap(object):
         :param node:
         :return:
         """
-        print ("---------------------------------------")
-        print("node(old) = %s, self.h = %s" % (node, self.h))
         if node < self.currsize:
             m = node
             lc = self.left_child(node)
             rc = self.right_child(node)
-            if lc is not None:
-                print ("self.h[%s] > self.h[%s]" % (lc, m), self.h[lc] > self.h[m])
-            if lc is not None and self.h[lc] > self.h[m]:
-                m = lc
-            if rc is not None:
-                print("self.h[%s] > self.h[%s], " % (rc, m), self.h[rc] > self.h[m])
-            if rc is not None and self.h[rc] > self.h[m]:
-                m = rc
+            for item in [lc, rc]:
+                if item is not None and self.h[item] > self.h[m]:
+                    m = item
             if m != node:
                 temp = self.h[node]
                 self.h[node] = self.h[m]
                 self.h[m] = temp
-                print("m(new) = %s, node(old) = %s, self.h = %s" % (m, node, self.h))
-                print("===========================================")
                 self.max_heapify(m)
 
     def build_heap(self, a):
@@ -74,9 +63,9 @@ class Heap(object):
         :param a:
         :return:
         """
-        self.currsize = len(a)
         self.h = list(a)
-        for i in range(self.currsize / 2, -1, -1):
+        self.currsize = len(a)
+        for i in range(self.currsize // 2, -1, -1):
             self.max_heapify(i)
 
     def get_max(self):
