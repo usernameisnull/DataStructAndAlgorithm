@@ -44,18 +44,19 @@ class Heap(object):
         :param node:
         :return:
         """
-        if node < self.currsize:
-            m = node
-            lc = self.left_child(node)
-            rc = self.right_child(node)
-            for item in [lc, rc]:
-                if item is not None and self.h[item] > self.h[m]:
-                    m = item
-            if m != node:
-                temp = self.h[node]
-                self.h[node] = self.h[m]
-                self.h[m] = temp
-                self.max_heapify(m)
+        if node >= self.currsize:
+            return
+        lc = self.left_child(node)
+        rc = self.right_child(node)
+        m = node
+        for item in [lc, rc]:
+            if item is not None and self.h[item] > self.h[m]:
+                m = item
+        if m != node:
+            temp = self.h[node]
+            self.h[node] = self.h[m]
+            self.h[m] = temp
+            self.max_heapify(m)
 
     def build_heap(self, a):
         """
@@ -73,15 +74,16 @@ class Heap(object):
         获得最大值
         :return:
         """
-        if self.currsize >= 1:
-            me = self.h[0]
-            temp = self.h[0]
-            self.h[0] = self.h[self.currsize - 1]
-            self.h[self.currsize - 1] = temp
-            self.currsize -= 1
-            self.max_heapify(0)
-            return me
-        return None
+        # if self.currsize >= 1:
+        #     me = self.h[0]
+        #     temp = self.h[0]
+        #     self.h[0] = self.h[self.currsize - 1]
+        #     self.h[self.currsize - 1] = temp
+        #     self.currsize -= 1
+        #     self.max_heapify(0)
+        #     return me
+        # return None
+        return self.h[0]
 
     def heap_sort(self):
         """
@@ -101,6 +103,7 @@ class Heap(object):
         self.h.append(data)
         curr = self.currsize
         self.currsize += 1
+        # Parent(i) = floor((i-1)/2)，i 的父节点下标, 这里没做减一操作是因为curr还没把新添加的数据算进去
         while self.h[curr] > self.h[curr / 2]:
             temp = self.h[curr / 2]
             self.h[curr / 2] = self.h[curr]
@@ -143,10 +146,10 @@ def main():
         /
        1
     """
+    print h.get_max()
     h.heap_sort()
     print "after sort,l= "
     h.display()
-
 
 if __name__ == '__main__':
     main()
