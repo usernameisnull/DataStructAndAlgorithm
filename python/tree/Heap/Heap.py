@@ -16,9 +16,10 @@
 
 
 class Heap(object):
-    def __init__(self):
+    def __init__(self, _max=True):
         self.h = []
         self.currsize = 0
+        self.max = _max
 
     def left_child(self, i):
         """
@@ -35,10 +36,10 @@ class Heap(object):
         :param i:
         :return:
         """
-        result = 2*(i+1)
+        result = 2 * (i + 1)
         return result if result < self.currsize else None
 
-    def max_heapify(self, node):
+    def heapify(self, node):
         """
         构建最大堆
         :param node:
@@ -50,13 +51,18 @@ class Heap(object):
         rc = self.right_child(node)
         m = node
         for item in [lc, rc]:
-            if item is not None and self.h[item] > self.h[m]:
-                m = item
+            if item is not None:
+                if self.max:
+                    if self.h[item] > self.h[m]:
+                        m = item
+                else:
+                    if self.h[item] <= self.h[m]:
+                        m = item
         if m != node:
-            temp = self.h[node]
-            self.h[node] = self.h[m]
-            self.h[m] = temp
-            self.max_heapify(m)
+            temp = self.h[m]
+            self.h[m] = self.h[node]
+            self.h[node] = temp
+            self.heapify(m)
 
     def build_heap(self, a):
         """
@@ -67,22 +73,13 @@ class Heap(object):
         self.h = list(a)
         self.currsize = len(a)
         for i in range(self.currsize // 2, -1, -1):
-            self.max_heapify(i)
+            self.heapify(i)
 
-    def get_max(self):
+    def get_extremal(self):
         """
         获得最大值
         :return:
         """
-        # if self.currsize >= 1:
-        #     me = self.h[0]
-        #     temp = self.h[0]
-        #     self.h[0] = self.h[self.currsize - 1]
-        #     self.h[self.currsize - 1] = temp
-        #     self.currsize -= 1
-        #     self.max_heapify(0)
-        #     return me
-        # return None
         return self.h[0]
 
     def heap_sort(self):
@@ -96,7 +93,7 @@ class Heap(object):
             self.h[0] = self.h[self.currsize - 1]
             self.h[self.currsize - 1] = temp
             self.currsize -= 1
-            self.max_heapify(0)
+            self.heapify(0)
         self.currsize = size
 
     def insert(self, data):
@@ -111,7 +108,7 @@ class Heap(object):
             curr = curr / 2
 
     def display(self):
-        print(self.h)
+        return self.h
 
 
 def main():
@@ -131,8 +128,7 @@ def main():
     l = [5, 4, 6, 3, 7, 2, 8, 1]
     h = Heap()
     h.build_heap(l)
-    print "after build,l= "
-    h.display()
+    print "after build,l= ", h.display()
     """
         每个子树的顶端值都大于其叶子节点的值, 最大堆
                 8
@@ -146,10 +142,19 @@ def main():
         /
        1
     """
-    print h.get_max()
+    print "极大值: ", h.get_extremal()
     h.heap_sort()
-    print "after sort,l= "
-    h.display()
+    print "after sort,l = ", h.display()
+
+    print "极小值===================="
+    l = [5, 4, 6, 3, 7, 2, 8, 1]
+    h = Heap(False)
+    h.build_heap(l)
+    print "after build,l= ", h.display()
+    print "极小值: ", h.get_extremal()
+    h.heap_sort()
+    print "after sort, l= ", h.display()
+
 
 if __name__ == '__main__':
     main()
